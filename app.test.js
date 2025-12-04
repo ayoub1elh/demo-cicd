@@ -9,7 +9,7 @@ describe('API Tests', () => {
   test('GET / returns welcome message', async () => {
     const response = await request(app).get('/');
     expect(response.status).toBe(200);
-    expect(response.body.message).toBe('Hello from Jenkins CI/CD!');
+    expect(response.body.message).toBe('Hello from Dev');
   });
 
   test('GET /health returns healthy status', async () => {
