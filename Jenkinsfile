@@ -1,10 +1,8 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:22-alpine'
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
-            reuseNode true
-        }
+    agent any
+    
+    tools {
+        nodejs 'NodeJS'
     }
     
     environment {
@@ -35,7 +33,6 @@ pipeline {
         }
         
         stage('Build Docker Image') {
-            agent any
             steps {
                 echo 'Building Docker image...'
                 sh "docker build -t ${DOCKER_IMAGE}:${BUILD_NUMBER} ."
@@ -44,7 +41,6 @@ pipeline {
         }
         
         stage('Deploy') {
-            agent any
             steps {
                 echo 'Deploying application...'
                 sh """
@@ -60,7 +56,6 @@ pipeline {
         }
         
         stage('Health Check') {
-            agent any
             steps {
                 echo 'Running health check...'
                 sh 'sleep 5'
