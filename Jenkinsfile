@@ -58,8 +58,19 @@ pipeline {
         stage('Health Check') {
             steps {
                 echo 'Running health check...'
-                sh 'sleep 5'
-                sh 'curl -f http://localhost:3000/health || exit 1'
+                sh 'sleep 10'
+                sh '''
+                    for i in 1 2 3 4 5; do
+                        if docker exec ${CONTAINER_NAME} wget -q -O- http://localhost:3000/health; then
+                            echo "Health check passed!"
+                            exit 0
+                        fi
+                        echo "Attempt $i failed, retrying..."
+                        sleep 2
+                    done
+                    echo "Health check failed after 5 attempts"
+                    exit 1
+                '''
             }
         }
     }
